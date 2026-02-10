@@ -1,0 +1,178 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
+media_library:
+  name: cloudinary
+  config:
+    cloud_name: "YOUR_CLOUDINARY_CLOUD_NAME"
+    upload_preset: "YOUR_UNSIGNED_UPLOAD_PRESET"
+
+collections:
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - label: "Site Info"
+        name: "site_info"
+        file: "content/settings/site_info.yml"
+        fields:
+          - { label: "Site title", name: "title", widget: "string" }
+          - { label: "Admin name", name: "admin_name", widget: "string" }
+          - { label: "Admin email", name: "admin_email", widget: "string" }
+          - {
+              label: "Diamond 1 coords",
+              name: "diamond_1",
+              widget: "string",
+              hint: "lat,lng format",
+            }
+          - {
+              label: "Diamond 2 coords",
+              name: "diamond_2",
+              widget: "string",
+              hint: "lat,lng format",
+            }
+
+  - name: "pages"
+    label: "Pages"
+    folder: "content/pages"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - {
+          label: "URL Slug",
+          name: "slug",
+          widget: "string",
+          hint: "Used in site URLs",
+        }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "teams"
+    label: "Teams"
+    folder: "content/teams"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Team Name", name: "name", widget: "string" }
+      - { label: "Pod / Division", name: "pod", widget: "string" }
+      - { label: "Active", name: "active", widget: "boolean", default: true }
+      - { label: "Team Photo / Logo", name: "logo", widget: "image" }
+      - { label: "Contact Name", name: "contact_name", widget: "string" }
+      - { label: "Contact Phone", name: "contact_phone", widget: "string" }
+      - { label: "Contact Email", name: "contact_email", widget: "string" }
+
+  - name: "schedule"
+    label: "Schedule"
+    folder: "content/schedule"
+    create: true
+    slug: "{{year}}-{{slug}}"
+    fields:
+      - { label: "Game Date & Time", name: "datetime", widget: "datetime" }
+      - {
+          label: "Home Team",
+          name: "home_team",
+          widget: "relation",
+          collection: "teams",
+          search_fields: ["name"],
+          value_field: "name",
+        }
+      - {
+          label: "Away Team",
+          name: "away_team",
+          widget: "relation",
+          collection: "teams",
+          search_fields: ["name"],
+          value_field: "name",
+        }
+      - { label: "Location", name: "location", widget: "string" }
+      - { label: "Field", name: "field", widget: "string" }
+      - {
+          label: "Status",
+          name: "status",
+          widget: "select",
+          options: ["Scheduled", "In Progress", "Complete", "Cancelled"],
+        }
+      - {
+          label: "Result Entry",
+          name: "result",
+          widget: "relation",
+          collection: "results",
+          search_fields: ["title"],
+          value_field: "title",
+          required: false,
+        }
+
+  - name: "results"
+    label: "Results"
+    folder: "content/results"
+    create: true
+    slug: "result-{{slug}}"
+    fields:
+      - {
+          label: "Title",
+          name: "title",
+          widget: "string",
+          hint: "Short label, e.g. Team A vs Team B - 2026-02-10",
+        }
+      - {
+          label: "Linked Game",
+          name: "game",
+          widget: "relation",
+          collection: "schedule",
+          search_fields: ["datetime"],
+          value_field: "datetime",
+          required: false,
+        }
+      - {
+          label: "Home Team",
+          name: "home_team",
+          widget: "relation",
+          collection: "teams",
+          search_fields: ["name"],
+          value_field: "name",
+        }
+      - { label: "Home Score", name: "home_score", widget: "number" }
+      - {
+          label: "Away Team",
+          name: "away_team",
+          widget: "relation",
+          collection: "teams",
+          search_fields: ["name"],
+          value_field: "name",
+        }
+      - { label: "Away Score", name: "away_score", widget: "number" }
+      - {
+          label: "Match Notes",
+          name: "notes",
+          widget: "markdown",
+          required: false,
+        }
+
+  - name: "standings"
+    label: "Standings"
+    folder: "content/standings"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {
+          label: "Team",
+          name: "team",
+          widget: "relation",
+          collection: "teams",
+          search_fields: ["name"],
+          value_field: "name",
+        }
+      - { label: "Pod / Division", name: "pod", widget: "string" }
+      - { label: "Wins", name: "wins", widget: "number", default: 0 }
+      - { label: "Losses", name: "losses", widget: "number", default: 0 }
+      - { label: "Ties", name: "ties", widget: "number", default: 0 }
+      - { label: "Points", name: "points", widget: "number", default: 0 }
+      - {
+          label: "Last Updated",
+          name: "last_updated",
+          widget: "datetime",
+          required: false,
+        }
