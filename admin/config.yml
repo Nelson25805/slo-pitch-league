@@ -8,8 +8,8 @@ public_folder: "/assets/uploads"
 media_library:
   name: cloudinary
   config:
-    cloud_name: "YOUR_CLOUDINARY_CLOUD_NAME"
-    upload_preset: "YOUR_UNSIGNED_UPLOAD_PRESET"
+    cloud_name: "dkueeotal"
+    upload_preset: "slo-pitch-unsigned"
 
 collections:
   - name: "settings"
